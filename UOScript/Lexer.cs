@@ -36,7 +36,6 @@ namespace UOScript
         WHILE,
         ENDWHILE,
         FOR,
-        FOREACH,
         ENDFOR,
         BREAK,
         CONTINUE,
@@ -61,7 +60,6 @@ namespace UOScript
         SERIAL,
         INTEGER,
         DOUBLE,
-        LIST,
 
         // Modifiers
         QUIET, // @ symbol
@@ -395,14 +393,6 @@ namespace UOScript
                         ParseForLoop(statement, lexemes.Slice(1, lexemes.Length - 1));
                         break;
                     }
-                case "foreach":
-                    {
-                        if (lexemes.Length != 4)
-                            throw new SyntaxError(node, "Script compilation error");
-
-                        ParseForEachLoop(statement, lexemes.Slice(1, lexemes.Length - 1));
-                        break;
-                    }
                 case "endfor":
                     if (lexemes.Length > 1)
                         throw new SyntaxError(node, "Script compilation error");
@@ -606,31 +596,10 @@ namespace UOScript
                 ParseValue(loop, lexemes[0], ASTNodeType.STRING);
 
             }
-            else if (lexemes.Length == 3 && lexemes[1] == "to")
-            {
-                // for X to LIST
-                var loop = statement.Push(ASTNodeType.FOREACH, null, _curLine);
-
-                loop.Push(ASTNodeType.STRING, lexemes[2], _curLine);
-                loop.Push(ASTNodeType.LIST, lexemes[2].Substring(0, lexemes[2].Length - 2), _curLine);
-            }
             else
             {
                 throw new SyntaxError(statement, "Invalid for loop");
             }
-        }
-
-        private static void ParseForEachLoop(ASTNode statement, string[] lexemes)
-        {
-            // foreach X in LIST
-            var loop = statement.Push(ASTNodeType.FOREACH, null, _curLine);
-
-            if (lexemes[1] != "in")
-                throw new SyntaxError(statement, "Invalid foreach loop");
-
-            // This is the iterator name
-            ParseValue(loop, lexemes[0], ASTNodeType.STRING);
-            loop.Push(ASTNodeType.LIST, lexemes[2], _curLine);
         }
     }
 }

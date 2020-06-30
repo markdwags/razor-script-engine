@@ -583,8 +583,7 @@ namespace UOScript
                             {
                                 node = _statement.FirstChild();
 
-                                if (node.Type == ASTNodeType.FOR ||
-                                    node.Type == ASTNodeType.FOREACH)
+                                if (node.Type == ASTNodeType.FOR)
                                 {
                                     depth++;
                                 }
@@ -606,89 +605,6 @@ namespace UOScript
                         }
                     }
                     break;
-                case ASTNodeType.FOREACH:
-                    {
-                        // foreach VAR in LIST
-                        // The iterator's name is the hash code of the for loop's ASTNode.
-                        var varName = node.FirstChild().Lexeme;
-                        var listName = node.FirstChild().Next().Lexeme;
-                        var iterName = node.GetHashCode().ToString();
-
-                        // When we first enter the loop, push a new scope
-                        if (_scope.StartNode != node)
-                        {
-                            PushScope(node);
-
-                            // Create a dummy argument that acts as our iterator object
-                            var iter = new ASTNode(ASTNodeType.INTEGER, "0", node, 0);
-                            _scope.SetVar(iterName, new Argument(this, iter));
-
-                            // Make the user-chosen variable have the value for the front of the list
-                            var arg = Interpreter.GetListValue(listName, 0);
-
-                            if (arg != null)
-                                _scope.SetVar(varName, arg);
-                            else
-                                _scope.ClearVar(varName);
-                        }
-                        else
-                        {
-                            // Increment the iterator argument
-                            var idx = _scope.GetVar(iterName).AsInt() + 1;
-                            var iter = new ASTNode(ASTNodeType.INTEGER, idx.ToString(), node, 0);
-                            _scope.SetVar(iterName, new Argument(this, iter));
-
-                            // Update the user-chosen variable
-                            var arg = Interpreter.GetListValue(listName, idx);
-
-                            if (arg != null)
-                                _scope.SetVar(varName, arg);
-                            else
-                                _scope.ClearVar(varName);
-                        }
-
-                        // Check loop condition
-                        var i = _scope.GetVar(varName);
-
-                        if (i != null)
-                        {
-                            // enter the loop
-                            Advance();
-                        }
-                        else
-                        {
-                            // Walk until the end of the loop
-                            Advance();
-
-                            depth = 0;
-
-                            while (_statement != null)
-                            {
-                                node = _statement.FirstChild();
-
-                                if (node.Type == ASTNodeType.FOR ||
-                                    node.Type == ASTNodeType.FOREACH)
-                                {
-                                    depth++;
-                                }
-                                else if (node.Type == ASTNodeType.ENDFOR)
-                                {
-                                    if (depth == 0)
-                                    {
-                                        PopScope();
-                                        // Go one past the end so the loop doesn't repeat
-                                        Advance();
-                                        break;
-                                    }
-
-                                    depth--;
-                                }
-
-                                Advance();
-                            }
-                        }
-                        break;
-                    }
                 case ASTNodeType.ENDFOR:
                     // Walk backward to the for statement
                     _statement = _statement.Prev();
@@ -697,8 +613,7 @@ namespace UOScript
                     {
                         node = _statement.FirstChild();
 
-                        if (node.Type == ASTNodeType.FOR ||
-                            node.Type == ASTNodeType.FOREACH)
+                        if (node.Type == ASTNodeType.FOR)
                         {
                             break;
                         }
@@ -721,8 +636,7 @@ namespace UOScript
                         node = _statement.FirstChild();
 
                         if (node.Type == ASTNodeType.WHILE ||
-                            node.Type == ASTNodeType.FOR ||
-                            node.Type == ASTNodeType.FOREACH)
+                            node.Type == ASTNodeType.FOR)
                         {
                             depth++;
                         }
@@ -762,8 +676,7 @@ namespace UOScript
                             depth++;
                         }
                         else if (node.Type == ASTNodeType.WHILE ||
-                                 node.Type == ASTNodeType.FOR ||
-                                 node.Type == ASTNodeType.FOREACH)
+                                 node.Type == ASTNodeType.FOR)
                         {
                             if (depth == 0)
                                 break;
@@ -1042,12 +955,6 @@ namespace UOScript
         // Aliases only hold serial numbers
         private static Dictionary<string, uint> _aliases = new Dictionary<string, uint>();
 
-        // Lists
-        private static Dictionary<string, List<Argument>> _lists = new Dictionary<string, List<Argument>>();
-
-        // Timers
-        private static Dictionary<string, DateTime> _timers = new Dictionary<string, DateTime>();
-
         // Expressions
         public delegate IComparable ExpressionHandler(string expression, Argument[] args, bool quiet);
         public delegate T ExpressionHandler<T>(string expression, Argument[] args, bool quiet) where T : IComparable;
@@ -1137,128 +1044,7 @@ namespace UOScript
         {
             _aliases[alias] = serial;
         }
-
-        public static void CreateList(string name)
-        {
-            if (_lists.ContainsKey(name))
-                return;
-
-            _lists[name] = new List<Argument>();
-        }
-
-        public static void DestroyList(string name)
-        {
-            _lists.Remove(name);
-        }
-
-        public static void ClearList(string name)
-        {
-            if (!_lists.ContainsKey(name))
-                return;
-
-            _lists[name].Clear();
-        }
-
-        public static bool ListExists(string name)
-        {
-            return _lists.ContainsKey(name);
-        }
-
-        public static bool ListContains(string name, Argument arg)
-        {
-            if (!_lists.ContainsKey(name))
-                throw new RunTimeError(null, "List does not exist");
-
-            return _lists[name].Contains(arg);
-        }
-
-        public static int ListLength(string name)
-        {
-            if (!_lists.ContainsKey(name))
-                throw new RunTimeError(null, "List does not exist");
-
-            return _lists[name].Count;
-        }
-
-        public static void PushList(string name, Argument arg, bool front, bool unique)
-        {
-            if (!_lists.ContainsKey(name))
-                throw new RunTimeError(null, "List does not exist");
-
-            if (unique && _lists[name].Contains(arg))
-                return;
-
-            if (front)
-                _lists[name].Insert(0, arg);
-            else
-                _lists[name].Add(arg);
-        }
-
-        public static bool PopList(string name, Argument arg)
-        {
-            if (!_lists.ContainsKey(name))
-                throw new RunTimeError(null, "List does not exist");
-
-            return _lists[name].Remove(arg);
-        }
-
-        public static bool PopList(string name, bool front)
-        {
-            if (!_lists.ContainsKey(name))
-                throw new RunTimeError(null, "List does not exist");
-
-            var idx = front ? 0 : _lists[name].Count - 1;
-
-            _lists[name].RemoveAt(idx);
-
-            return _lists[name].Count > 0;
-        }
-
-        public static Argument GetListValue(string name, int idx)
-        {
-            if (!_lists.ContainsKey(name))
-                throw new RunTimeError(null, "List does not exist");
-
-            var list = _lists[name];
-
-            if (idx < list.Count)
-                return list[idx];
-
-            return null;
-        }
-
-        public static void CreateTimer(string name)
-        {
-            _timers[name] = DateTime.UtcNow;
-        }
-
-        public static TimeSpan GetTimer(string name)
-        {
-            if (!_timers.TryGetValue(name, out DateTime timestamp))
-                throw new RunTimeError(null, "Timer does not exist");
-
-            TimeSpan elapsed = DateTime.UtcNow - timestamp;
-
-            return elapsed;
-        }
-
-        public static void SetTimer(string name, int elapsed)
-        {
-            // Setting a timer to start at a given value is equivalent to
-            // starting the timer that number of milliseconds in the past.
-            _timers[name] = DateTime.UtcNow.AddMilliseconds(-elapsed);
-        }
-
-        public static void RemoveTimer(string name)
-        {
-            _timers.Remove(name);
-        }
-
-        public static bool TimerExists(string name)
-        {
-            return _timers.ContainsKey(name);
-        }
-
+      
         public static bool StartScript(Script script)
         {
             if (_activeScript != null)

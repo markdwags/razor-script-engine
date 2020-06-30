@@ -35,6 +35,11 @@ namespace UOScript
             return true;
         }
 
+        private static uint DummyAlias(string alias)
+        {
+            return 0;
+        }
+
         private static bool MsgCommand(string command, Argument[] args, bool quiet, bool force)
         {
             Console.WriteLine("Msg {0}", args[0].AsString());
@@ -42,189 +47,125 @@ namespace UOScript
             return true;
         }
 
-        private static bool CreateList(string command, Argument[] args, bool quiet, bool force)
-        {
-            Console.WriteLine("Creating list {0}", args[0].AsString());
-
-            Interpreter.CreateList(args[0].AsString());
-
-            return true;
-        }
-
-        private static bool PushList(string command, Argument[] args, bool quiet, bool force)
-        {
-            Console.WriteLine("Pushing {0} to list {1}", args[1].AsString(), args[0].AsString());
-
-            Interpreter.PushList(args[0].AsString(), args[1], true, false);
-
-            return true;
-        }
-
         public static void RegisterDummyCommands()
         {
-            // Commands. From UOSteam Documentation
-            Interpreter.RegisterCommandHandler("fly", DummyCommand);
-            Interpreter.RegisterCommandHandler("land", DummyCommand);
-            Interpreter.RegisterCommandHandler("setability", DummyCommand);
-            Interpreter.RegisterCommandHandler("attack", DummyCommand);
-            Interpreter.RegisterCommandHandler("clearhands", DummyCommand);
-            Interpreter.RegisterCommandHandler("clickobject", DummyCommand);
-            Interpreter.RegisterCommandHandler("bandageself", DummyCommand);
-            Interpreter.RegisterCommandHandler("usetype", DummyCommand);
-            Interpreter.RegisterCommandHandler("useobject", DummyCommand);
-            Interpreter.RegisterCommandHandler("useonce", DummyCommand);
-            Interpreter.RegisterCommandHandler("cleanusequeue", DummyCommand);
-            Interpreter.RegisterCommandHandler("moveitem", DummyCommand);
-            Interpreter.RegisterCommandHandler("moveitemoffset", DummyCommand);
-            Interpreter.RegisterCommandHandler("movetype", DummyCommand);
-            Interpreter.RegisterCommandHandler("movetypeoffset", DummyCommand);
-            Interpreter.RegisterCommandHandler("walk", DummyCommand);
-            Interpreter.RegisterCommandHandler("turn", DummyCommand);
-            Interpreter.RegisterCommandHandler("run", DummyCommand);
-            Interpreter.RegisterCommandHandler("useskill", DummyCommand);
-            Interpreter.RegisterCommandHandler("feed", DummyCommand);
-            Interpreter.RegisterCommandHandler("rename", DummyCommand);
-            Interpreter.RegisterCommandHandler("shownames", DummyCommand);
-            Interpreter.RegisterCommandHandler("togglehands", DummyCommand);
-            Interpreter.RegisterCommandHandler("equipitem", DummyCommand);
-            Interpreter.RegisterCommandHandler("togglemounted", DummyCommand);
-            Interpreter.RegisterCommandHandler("equipwand", DummyCommand);
-            Interpreter.RegisterCommandHandler("buy", DummyCommand);
-            Interpreter.RegisterCommandHandler("sell", DummyCommand);
-            Interpreter.RegisterCommandHandler("clearbuy", DummyCommand);
-            Interpreter.RegisterCommandHandler("clearsell", DummyCommand);
-            Interpreter.RegisterCommandHandler("organizer", DummyCommand);
-            Interpreter.RegisterCommandHandler("autoloot", DummyCommand);
-            Interpreter.RegisterCommandHandler("dress", DummyCommand);
-            Interpreter.RegisterCommandHandler("undress", DummyCommand);
-            Interpreter.RegisterCommandHandler("dressconfig", DummyCommand);
-            Interpreter.RegisterCommandHandler("toggleautoloot", DummyCommand);
-            Interpreter.RegisterCommandHandler("togglescavenger", DummyCommand);
-            Interpreter.RegisterCommandHandler("counter", DummyCommand);
-            Interpreter.RegisterCommandHandler("unsetalias", DummyCommand);
-            Interpreter.RegisterCommandHandler("setalias", DummyCommand);
-            Interpreter.RegisterCommandHandler("promptalias", DummyCommand);
-            Interpreter.RegisterCommandHandler("waitforgump", DummyCommand);
-            Interpreter.RegisterCommandHandler("replygump", DummyCommand);
-            Interpreter.RegisterCommandHandler("closegump", DummyCommand);
-            Interpreter.RegisterCommandHandler("clearjournal", DummyCommand);
-            Interpreter.RegisterCommandHandler("waitforjournal", DummyCommand);
-            Interpreter.RegisterCommandHandler("poplist", DummyCommand);
-            Interpreter.RegisterCommandHandler("pushlist", PushList);
-            Interpreter.RegisterCommandHandler("removelist", DummyCommand);
-            Interpreter.RegisterCommandHandler("createlist", CreateList);
-            Interpreter.RegisterCommandHandler("clearlist", DummyCommand);
-            Interpreter.RegisterCommandHandler("info", DummyCommand);
-            Interpreter.RegisterCommandHandler("pause", DummyCommand);
-            Interpreter.RegisterCommandHandler("ping", DummyCommand);
-            Interpreter.RegisterCommandHandler("playmacro", DummyCommand);
-            Interpreter.RegisterCommandHandler("playsound", DummyCommand);
-            Interpreter.RegisterCommandHandler("resync", DummyCommand);
-            Interpreter.RegisterCommandHandler("snapshot", DummyCommand);
-            Interpreter.RegisterCommandHandler("hotkeys", DummyCommand);
-            Interpreter.RegisterCommandHandler("where", DummyCommand);
-            Interpreter.RegisterCommandHandler("messagebox", DummyCommand);
-            Interpreter.RegisterCommandHandler("mapuo", DummyCommand);
-            Interpreter.RegisterCommandHandler("clickscreen", DummyCommand);
-            Interpreter.RegisterCommandHandler("paperdoll", DummyCommand);
-            Interpreter.RegisterCommandHandler("helpbutton", DummyCommand);
-            Interpreter.RegisterCommandHandler("guildbutton", DummyCommand);
-            Interpreter.RegisterCommandHandler("questsbutton", DummyCommand);
-            Interpreter.RegisterCommandHandler("logoutbutton", DummyCommand);
-            Interpreter.RegisterCommandHandler("virtue", DummyCommand);
-            Interpreter.RegisterCommandHandler("msg", MsgCommand);
-            Interpreter.RegisterCommandHandler("headmsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("partymsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("guildmsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("allymsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("whispermsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("yellmsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("sysmsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("chatmsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("emotemsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("promptmsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("timermsg", DummyCommand);
-            Interpreter.RegisterCommandHandler("waitforprompt", DummyCommand);
-            Interpreter.RegisterCommandHandler("cancelprompt", DummyCommand);
-            Interpreter.RegisterCommandHandler("addfriend", DummyCommand);
-            Interpreter.RegisterCommandHandler("removefriend", DummyCommand);
-            Interpreter.RegisterCommandHandler("contextmenu", DummyCommand);
-            Interpreter.RegisterCommandHandler("waitforcontext", DummyCommand);
-            Interpreter.RegisterCommandHandler("ignoreobject", DummyCommand);
-            Interpreter.RegisterCommandHandler("clearignorelist", DummyCommand);
-            Interpreter.RegisterCommandHandler("setskill", DummyCommand);
-            Interpreter.RegisterCommandHandler("waitforproperties", DummyCommand);
-            Interpreter.RegisterCommandHandler("autocolorpick", DummyCommand);
-            Interpreter.RegisterCommandHandler("waitforcontents", DummyCommand);
-            Interpreter.RegisterCommandHandler("miniheal", DummyCommand);
-            Interpreter.RegisterCommandHandler("bigheal", DummyCommand);
-            Interpreter.RegisterCommandHandler("cast", DummyCommand);
-            Interpreter.RegisterCommandHandler("chivalryheal", DummyCommand);
-            Interpreter.RegisterCommandHandler("waitfortarget", DummyCommand);
-            Interpreter.RegisterCommandHandler("canceltarget", DummyCommand);
-            Interpreter.RegisterCommandHandler("target", DummyCommand);
-            Interpreter.RegisterCommandHandler("targettype", DummyCommand);
-            Interpreter.RegisterCommandHandler("targetground", DummyCommand);
-            Interpreter.RegisterCommandHandler("targettile", DummyCommand);
-            Interpreter.RegisterCommandHandler("targettileoffset", DummyCommand);
-            Interpreter.RegisterCommandHandler("targettilerelative", DummyCommand);
-            Interpreter.RegisterCommandHandler("cleartargetqueue", DummyCommand);
-            Interpreter.RegisterCommandHandler("settimer", DummyCommand);
-            Interpreter.RegisterCommandHandler("removetimer", DummyCommand);
-            Interpreter.RegisterCommandHandler("createtimer", DummyCommand);
+            // Commands based on Actions.cs
+            Interpreter.RegisterCommandHandler("attack", DummyCommand); //Attack by serial
+            Interpreter.RegisterCommandHandler("cast", DummyCommand); //BookcastAction, etc
+
+            // Dress
+            Interpreter.RegisterCommandHandler("dress", DummyCommand); //DressAction
+            Interpreter.RegisterCommandHandler("undress", DummyCommand); //UndressAction
+
+            // Targets
+            Interpreter.RegisterCommandHandler("target", DummyCommand); //Absolute Target
+            Interpreter.RegisterCommandHandler("targettype", DummyCommand); //TargetTypeAction
+            Interpreter.RegisterCommandHandler("targetrelloc", DummyCommand); //TargetRelLocAction
+
+            Interpreter.RegisterCommandHandler("waitfortarget", DummyCommand); //WaitForTargetAction
+            Interpreter.RegisterCommandHandler("wft", DummyCommand); //WaitForTargetAction
+
+            // Using stuff
+            Interpreter.RegisterCommandHandler("dclicktype", DummyCommand); // DoubleClickTypeAction
+            Interpreter.RegisterCommandHandler("dclick", DummyCommand); //DoubleClickAction
+
+            Interpreter.RegisterCommandHandler("usetype", DummyCommand); // DoubleClickTypeAction
+            Interpreter.RegisterCommandHandler("useobject", DummyCommand); //DoubleClickAction
+
+            // Moving stuff
+            Interpreter.RegisterCommandHandler("drop", DummyCommand); //DropAction
+            Interpreter.RegisterCommandHandler("droprelloc", DummyCommand); //DropAction
+            Interpreter.RegisterCommandHandler("lift", DummyCommand); //LiftAction
+            Interpreter.RegisterCommandHandler("lifttype", DummyCommand); //LiftTypeAction
+
+            // Gump
+            Interpreter.RegisterCommandHandler("waitforgump", DummyCommand); // WaitForGumpAction
+            Interpreter.RegisterCommandHandler("gumpresponse", DummyCommand); // GumpResponseAction
+            Interpreter.RegisterCommandHandler("gumpclose", DummyCommand); // GumpResponseAction
+
+            // Menu
+            Interpreter.RegisterCommandHandler("menu", DummyCommand); //ContextMenuAction
+            Interpreter.RegisterCommandHandler("menuresponse", DummyCommand); //MenuResponseAction
+            Interpreter.RegisterCommandHandler("waitformenu", DummyCommand); //WaitForMenuAction
+
+            // Prompt
+            Interpreter.RegisterCommandHandler("promptresponse", DummyCommand); //PromptAction
+            Interpreter.RegisterCommandHandler("waitforprompt", DummyCommand); //WaitForPromptAction
+
+            // Hotkey execution
+            Interpreter.RegisterCommandHandler("hotkey", DummyCommand); //HotKeyAction
+
+            // Messages
+            Interpreter.RegisterCommandHandler("say", DummyCommand); //SpeechAction
+            Interpreter.RegisterCommandHandler("msg", DummyCommand); //SpeechAction
+            Interpreter.RegisterCommandHandler("overhead", DummyCommand); //OverheadMessageAction
+            Interpreter.RegisterCommandHandler("headmsg", DummyCommand); //OverheadMessageAction
+            Interpreter.RegisterCommandHandler("sysmsg", DummyCommand); //SystemMessageAction
+
+            // General Waits/Pauses
+            Interpreter.RegisterCommandHandler("wait", DummyCommand); //PauseAction
+            Interpreter.RegisterCommandHandler("pause", DummyCommand); //PauseAction
+
+            // Misc
+            Interpreter.RegisterCommandHandler("setability", DummyCommand); //SetAbilityAction
+            Interpreter.RegisterCommandHandler("setlasttarget", DummyCommand); //SetLastTargetAction
+            Interpreter.RegisterCommandHandler("lasttarget", DummyCommand); //LastTargetAction
+            Interpreter.RegisterCommandHandler("skill", DummyCommand); //SkillAction
+            Interpreter.RegisterCommandHandler("useskill", DummyCommand); //SkillAction
+            Interpreter.RegisterCommandHandler("walk", DummyCommand); //Move/WalkAction
+            Interpreter.RegisterCommandHandler("potion", DummyCommand);
+
+            // Script related
+            Interpreter.RegisterCommandHandler("script", DummyCommand);
+            Interpreter.RegisterCommandHandler("setvar", DummyCommand);
+            Interpreter.RegisterCommandHandler("setvariable", DummyCommand);
+
+            Interpreter.RegisterCommandHandler("stop", DummyCommand);
 
 
             // Expressions
-            Interpreter.RegisterExpressionHandler("findalias", DummyExpression);
-            Interpreter.RegisterExpressionHandler("contents", DummyExpression);
-            Interpreter.RegisterExpressionHandler("inregion", DummyExpression);
-            Interpreter.RegisterExpressionHandler("skill", DummyExpression);
-            Interpreter.RegisterExpressionHandler("findobject", DummyExpression);
-            Interpreter.RegisterExpressionHandler("distance", DummyExpression);
-            Interpreter.RegisterExpressionHandler("inrange", DummyExpression);
-            Interpreter.RegisterExpressionHandler("buffexists", DummyExpression);
-            Interpreter.RegisterExpressionHandler("property", DummyExpression);
-            Interpreter.RegisterExpressionHandler("findtype", DummyExpression);
-            Interpreter.RegisterExpressionHandler("findlayer", DummyExpression);
-            Interpreter.RegisterExpressionHandler("skillstate", DummyExpression);
-            Interpreter.RegisterExpressionHandler("counttype", DummyExpression);
-            Interpreter.RegisterExpressionHandler("counttypeground", DummyExpression);
-            Interpreter.RegisterExpressionHandler("findwand", DummyExpression);
-            Interpreter.RegisterExpressionHandler("inparty", DummyExpression);
-            Interpreter.RegisterExpressionHandler("infriendslist", DummyExpression);
-            Interpreter.RegisterExpressionHandler("war", DummyExpression);
-            Interpreter.RegisterExpressionHandler("ingump", DummyExpression);
-            Interpreter.RegisterExpressionHandler("gumpexists", DummyExpression);
-            Interpreter.RegisterExpressionHandler("injournal", DummyExpression);
-            Interpreter.RegisterExpressionHandler("listexists", DummyExpression);
-            Interpreter.RegisterExpressionHandler("list", DummyExpression);
-            Interpreter.RegisterExpressionHandler("inlist", DummyExpression);
-            Interpreter.RegisterExpressionHandler("timer", DummyExpression);
-            Interpreter.RegisterExpressionHandler("timerexists", DummyExpression);
-
-            // Player Attributes
+            Interpreter.RegisterExpressionHandler("stam", DummyExpression);
+            Interpreter.RegisterExpressionHandler("maxstam", DummyExpression);
+            Interpreter.RegisterExpressionHandler("hp", DummyExpression);
+            Interpreter.RegisterExpressionHandler("hits", DummyExpression);
+            Interpreter.RegisterExpressionHandler("maxhp", DummyExpression);
+            Interpreter.RegisterExpressionHandler("maxhits", DummyExpression);
             Interpreter.RegisterExpressionHandler("mana", DummyExpression);
-            Interpreter.RegisterExpressionHandler("x", DummyIntExpression);
-            Interpreter.RegisterExpressionHandler("y", DummyExpression);
-            Interpreter.RegisterExpressionHandler("z", DummyExpression);
-            Interpreter.RegisterExpressionHandler("name", DummyStringExpression);
+            Interpreter.RegisterExpressionHandler("maxmana", DummyExpression);
+            Interpreter.RegisterExpressionHandler("poisoned", DummyExpression);
+            Interpreter.RegisterExpressionHandler("hidden", DummyExpression);
 
-            // Object attributes
+            Interpreter.RegisterExpressionHandler("mounted", DummyExpression);
+            Interpreter.RegisterExpressionHandler("rhandempty", DummyExpression);
+            Interpreter.RegisterExpressionHandler("lhandempty", DummyExpression);
+
+            Interpreter.RegisterExpressionHandler("dead", DummyExpression);
+
+            Interpreter.RegisterExpressionHandler("str", DummyExpression);
+            Interpreter.RegisterExpressionHandler("int", DummyExpression);
+            Interpreter.RegisterExpressionHandler("dex", DummyExpression);
+
+            Interpreter.RegisterExpressionHandler("weight", DummyExpression);
+
+            Interpreter.RegisterExpressionHandler("skill", DummyExpression);
+            Interpreter.RegisterExpressionHandler("count", DummyExpression);
+            Interpreter.RegisterExpressionHandler("counter", DummyExpression);
+
+            Interpreter.RegisterExpressionHandler("insysmsg", DummyExpression);
+            Interpreter.RegisterExpressionHandler("insysmessage", DummyExpression);
+
+            Interpreter.RegisterExpressionHandler("findtype", DummyExpression);
 
 
             // Aliases
-            /*backpack
-            bank
-            enemy
-            friend
-            ground
-            last
-            lasttarget
-            lastobject
-            lefthand
-            mount
-            righthand
-            self*/
+            Interpreter.RegisterAliasHandler("backpack", DummyAlias);
+            Interpreter.RegisterAliasHandler("last", DummyAlias);
+            Interpreter.RegisterAliasHandler("lasttarget", DummyAlias);
+            Interpreter.RegisterAliasHandler("lastobject", DummyAlias);
+            Interpreter.RegisterAliasHandler("self", DummyAlias);
+            Interpreter.RegisterAliasHandler("righthand", DummyAlias);
+            Interpreter.RegisterAliasHandler("lefthand", DummyAlias);
+            Interpreter.RegisterAliasHandler("hand", DummyAlias);
 
         }
     }
